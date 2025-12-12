@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import type { Result } from "@/types/result.types";
 
 export function handleDbError(
