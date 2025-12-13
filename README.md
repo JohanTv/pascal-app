@@ -33,3 +33,15 @@ bun run build
 ```bash
 bun run start
 ```
+
+## Access Points
+
+The application serves two main user roles through distinct routes:
+
+- **Lead/Client Interface**: The landing page where users communicate with sales agents.
+  - Local: `http://localhost:3000/`
+  - Production: `https://pascal-ashen.vercel.app/`
+
+- **Intranet (Agents & Admins)**: The dashboard for sales agents and administrators to manage leads, conversations, and system settings.
+  - Local: `http://localhost:3000/intranet`
+  - Production: `https://pascal-ashen.vercel.app/intranet`
