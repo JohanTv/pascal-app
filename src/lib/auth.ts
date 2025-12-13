@@ -10,12 +10,18 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
   trustedOrigins: ["http://localhost:3000", "https://localhost:3000"],
+  emailAndPassword: {
+    enabled: true,
+  },
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       redirectURI:
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback/google` as string,
+      // Prevenir creación automática de nuevos usuarios con Google OAuth
+      // Solo usuarios pre-registrados en la BD pueden iniciar sesión
+      disableImplicitSignUp: true,
     },
   },
   plugins: [
