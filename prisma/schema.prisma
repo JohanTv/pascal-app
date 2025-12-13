@@ -7,6 +7,22 @@ datasource db {
   provider = "postgresql"
 }
 
+// ENUMS ------------------------------------------------
+
+enum ChatStatus {
+  QUEUED       // Lead wrote, nobody has responded (Appears in "En Cola")
+  IN_PROGRESS  // An agent took the chat (Appears in "Mis Conversaciones")
+  RESOLVED     // Finished (History)
+}
+
+enum SenderType {
+  LEAD
+  AGENT
+  SYSTEM       // For messages like: "Agent Juan has joined the chat"
+}
+
+// MODELS -----------------------------------------------
+
 model User {
   id            String    @id
   name          String
@@ -22,6 +38,8 @@ model User {
   banned     Boolean?  @default(false)
   banReason  String?
   banExpires DateTime?
+
+  conversations Conversation[]
 
   @@unique([email])
   @@map("user")
@@ -75,4 +93,79 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+// 2. The Visitor (Lead)
+// Created automatically when the anonymous user sends the first message
+model Lead {
+  id        String   @id @default(uuid()) // This UUID is saved in the client's localStorage
+  name      String?
+  email     String?  @unique
+  phone     String?
+
+  createdAt DateTime @default(now())
+  lastSeen  DateTime @default(now()) // To purge phantom leads if necessary
+
+  conversations Conversation[]
+
+  @@index([email])
+  @@map("lead")
+}
+
+// 3. The Conversation (The "Room")
+model Conversation {
+  id        String      @id @default(cuid())
+
+  // State and Queue Management
+  status    ChatStatus  @default(QUEUED)
+  priority  String?     @default("NORMAL") // "HIGH" if from an expensive property (future)
+
+  // AI Analysis Fields
+  aiSummary   String?   @db.Text
+  aiTags      String[]  @default([])
+
+  // Times for metrics
+  createdAt DateTime    @default(now()) // Time of entry to the queue
+  assignedAt DateTime?  // Time when the agent took it (To measure response time)
+  closedAt  DateTime?   // Time of closure
+
+  // Relations
+  leadId    String
+  lead      Lead        @relation(fields: [leadId], references: [id])
+
+  agentId   String?     // It's NULL while in QUEUED
+  agent     User?       @relation(fields: [agentId], references: [id])
+
+  messages  Message[]
+
+  // Indexes so the "Queue" Dashboard loads quickly
+  @@index([status, createdAt])
+  @@index([agentId, status])
+  @@map("conversation")
+}
+
+// 4. The Messages
+model Message {
+  id             String      @id @default(cuid())
+  content        String      @db.Text
+
+  // Knowing who sent it is vital to paint the bubble to the right or left
+  senderType     SenderType
+
+  // Read metadata
+  isRead         Boolean     @default(false)
+  readAt         DateTime?
+
+  // Relations
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  createdAt      DateTime    @default(now())
+
+  // Optional: If you want to support attachments or "Product Cards" in the future
+  attachmentUrl  String?
+  metadata       Json?       // Ex: { "type": "property_card", "propertyId": "123" }
+
+  @@index([conversationId])
+  @@map("message")
 }

@@ -1,8 +1,6 @@
-import type { Result } from "@/types/result.types";
+import type { Failure } from "@/types/result.types";
 
-export function handleDbError(
-  e: unknown,
-): Result<{ success: boolean; error: string }> {
+export function handleDbError(e: unknown): Failure {
   console.error("DB Error:", e); // Log para el desarrollador
 
   // Errores conocidos de Prisma
