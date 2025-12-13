@@ -51,6 +51,22 @@ export async function seedUsers(prisma: PrismaClient): Promise<SeedResult> {
     },
     {
       id: crypto.randomUUID(),
+      email: "rebefm13@gmail.com",
+      name: "Rebeca Flores",
+      role: "admin",
+      emailVerified: true,
+      banned: false,
+    },
+    {
+      id: crypto.randomUUID(),
+      email: "wparionasanchez@gmail.com",
+      name: "Walter Pariona",
+      role: "admin",
+      emailVerified: true,
+      banned: false,
+    },
+    {
+      id: crypto.randomUUID(),
       email: "ederson.flores7539@gmail.com",
       name: "Ederson Flores",
       role: "sales_agent",
