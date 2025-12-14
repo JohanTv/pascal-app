@@ -45,3 +45,24 @@ The application serves two main user roles through distinct routes:
 - **Intranet (Agents & Admins)**: The dashboard for sales agents and administrators to manage leads, conversations, and system settings.
   - Local: `http://localhost:3000/intranet`
   - Production: `https://pascal-ashen.vercel.app/intranet`
+
+## Seed Users
+
+These users are available for testing purposes.
+
+### Administrators (Google Login Only)
+These users must log in using the "Continue with Google" button.
+
+- **Rebeca Flores**: `rebefm13@gmail.com`
+- **Walter Pariona**: `wparionasanchez@gmail.com`
+
+### Sales Agents (Email/Password)
+These users can log in with the provided credentials.
+
+| Name | Email | Password |
+|------|-------|----------|
+| Ederson Flores | `ederson.flores7539@gmail.com` | `ederson123` |
+| Janet Villanueva | `janetg2503@gmail.com` | `janet123` |
+| Carlos Rodriguez | `carlos.rodriguez@gmail.com` | `carlos123` |
+| Maria Santos | `maria.santos@gmail.com` | `maria123` |
+
