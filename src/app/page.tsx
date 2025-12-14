@@ -1,6 +1,14 @@
+import Link from "next/link";
 import { ChatWidget } from "@/components/chat/chat-widget";
 import { ProjectShowcase } from "@/components/home/project-showcase";
+import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/mode-toggle";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function Home() {
   return (
@@ -8,7 +16,27 @@ export default function Home() {
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between p-6">
         <div className="text-2xl font-bold text-white">Pascal</div>
-        <ModeToggle />
+        <div className="flex items-center gap-4">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  asChild
+                  variant="outline"
+                  className=" hover:bg-white/10 hover:text-white"
+                >
+                  <Link href="/intranet">Acceder a la Intranet</Link>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  Solo podrán acceder los administradores y agentes de ventas
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <ModeToggle />
+        </div>
       </header>
 
       {/* Hero Section */}
